@@ -24,34 +24,23 @@ Follow these steps to set up the project locally:
    cd recommendation-engine-django
 
 ## Create and Activate a Virtual Environment:
-python -m venv env
-source env/bin/activate   # For Windows: env\Scripts\activate
+ ```sh
+   python -m venv env
+   source env/bin/activate   # For Windows: env\Scripts\activate
 
 ## Install Dependencies:
-pip install -r requirements.txt
+ ```sh
+   pip install -r requirements.txt
 
 ## Apply Database Migrations:
-python manage.py migrate
+ ```sh
+   python manage.py migrate
 
 ## Run the Development Server:
-python manage.py runserver
+ ```sh
+   python manage.py runserver
 
-# Then, open your browser and visit http://127.0.0.1:8000/ to view the application.
+## Then, open your browser and visit http://127.0.0.1:8000/ to view the application.
 
 Project Structure:
-recommendation-engine-django/
-├── assets/
-│   └── banner.png
-├── test_app/
-│   ├── __init__.py
-│   ├── models.py
-│   ├── views.py
-│   └── urls.py
-├── test_project/
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── db.sqlite3
-├── manage.py
-└── requirements.txt
+<pre> ``` recommendation-engine-django/ ├── assets/ │ └── banner.png ├── test_app/ │ ├── __init__.py │ ├── models.py │ ├── views.py │ └── urls.py ├── test_project/ │ ├── __init__.py │ ├── settings.py │ ├── urls.py │ └── wsgi.py ├── db.sqlite3 ├── manage.py └── requirements.txt ``` </pre>
