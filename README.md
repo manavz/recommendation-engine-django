@@ -33,4 +33,23 @@ Follow these steps to set up the project locally:
 
 ## Then, open your browser and visit http://127.0.0.1:8000/ to view the application.
 
-``` recommendation-engine-django/ ├── assets/ │ └── banner.png ├── test_app/ │ ├── __init__.py │ ├── models.py │ ├── views.py │ └── urls.py ├── test_project/ │ ├── __init__.py │ ├── settings.py │ ├── urls.py │ └── wsgi.py ├── db.sqlite3 ├── manage.py └── requirements.txt ```
+\```
+recommendation-engine-django/
+├── assets/
+│   └── banner.png
+├── test_app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── views.py
+│   └── urls.py
+├── test_project/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── db.sqlite3
+├── manage.py
+└── requirements.txt
+\```
+
+
