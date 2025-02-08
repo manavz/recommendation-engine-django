@@ -27,17 +27,8 @@ Follow these steps to set up the project locally:
  ```sh
    python -m venv env
    source env/bin/activate   # For Windows: env\Scripts\activate
-
-## Install Dependencies:
- ```sh
    pip install -r requirements.txt
-
-## Apply Database Migrations:
- ```sh
    python manage.py migrate
-
-## Run the Development Server:
- ```sh
    python manage.py runserver
 
 ## Then, open your browser and visit http://127.0.0.1:8000/ to view the application.
