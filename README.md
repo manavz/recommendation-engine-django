@@ -1,44 +1,57 @@
-# 🚀 Recommendation Engine - Django
+# Recommendation Engine - Django
 
 ![Project Banner](assets/banner.png)
 
-A powerful **Recommendation Engine** built using **Django** that provides personalized recommendations based on user preferences and behavior.
+A Django-based project that implements the core logic of a recommendation engine. This project demonstrates how to apply basic recommendation algorithms such as content-based and collaborative filtering using Django.
 
-## 📌 Features
-✅ Content-based filtering  
-✅ Collaborative filtering  
-✅ Scalable architecture with Django & PostgreSQL  
-✅ REST API support with Django Rest Framework (DRF)  
-✅ Background tasks with Celery & Redis  
+---
 
-## 🛠️ Installation
+## Features
 
-Clone the repository:
-```sh
-git clone https://github.com/manavz/recommendation-engine-django.git
-cd recommendation-engine-django
+- **Content-Based Filtering**: Recommends items based on similarity of item attributes.
+- **Collaborative Filtering**: Generates recommendations by analyzing user interactions.
+- **Simple Architecture**: Built using Django with SQLite as the default database.
 
+---
+
+## Installation
+
+Follow these steps to set up the project locally:
+
+1. **Clone the Repository**
+   ```sh
+   git clone https://github.com/manavz/recommendation-engine-django.git
+   cd recommendation-engine-django
+
+## Create and Activate a Virtual Environment:
 python -m venv env
-source env/bin/activate   # On Windows use: env\Scripts\activate
+source env/bin/activate   # For Windows: env\Scripts\activate
+
+## Install Dependencies:
 pip install -r requirements.txt
 
-Run database migrations:
+## Apply Database Migrations:
 python manage.py migrate
 
-Start the development server:
+## Run the Development Server:
 python manage.py runserver
 
-📦 recommendation-engine-django
- ┣ 📂 assets
- ┃ ┗ 🖼️ banner.png
- ┣ 📂 recommendation
- ┃ ┣ 📂 models
- ┃ ┣ 📂 views
- ┃ ┗ 📜 urls.py
- ┣ 📜 manage.py
- ┣ 📜 README.md
- ┗ 📜 requirements.txt
+# Then, open your browser and visit http://127.0.0.1:8000/ to view the application.
 
-📷 Screenshot
-
-
+Project Structure:
+recommendation-engine-django/
+├── assets/
+│   └── banner.png
+├── test_app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── views.py
+│   └── urls.py
+├── test_project/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── db.sqlite3
+├── manage.py
+└── requirements.txt
