@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Candidate to Skill Relationships</title>
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- LeaderLine for drawing arrows -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js"></script>
+    <style>
+        /* Custom Table Design (inspired by the CodePen example) */
+        .custom-table {
+            width: min(900px, calc(100% - 3rem));
+            margin-inline: auto;
+            border-collapse: collapse;
+            border-spacing: 2rem;
+            box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .custom-table th {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .custom-table td {
+            border-bottom: 2px dashed #eeeded;
+            font-size: 16px;
+            color: #686868;
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Header colors for each table */
+        #candidate-table.custom-table th {
+            background: #fffaee;
+            border-radius: 20px 0 0 0;
+            border-right: 7px solid #fff;
+        }
+
+        #skill-table.custom-table th {
+            background: #e5f4fb;
+        }
+
+        #feature-table.custom-table th {
+            background: #e3f4df;
+            border-radius: 0 20px 0 0;
+            border-left: 7px solid #fff;
+        }
+
+        /* Optional: make table rows clickable */
+        tr {
+            cursor: pointer;
+        }
+
+        .selected {
+            background-color: #f7f7f7;
+        }
+
+        /* Ensure table rows have relative positioning for LeaderLine */
+        .custom-table tbody tr {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Responsive design (optional) */
+        @media (max-width: 650px) {
+            .custom-table td {
+                display: grid;
+                gap: 2.5rem;
+                grid-template-columns: 1fr 1fr;
+                padding: 2rem;
+            }
+
+            .custom-table th {
+                display: none;
+            }
+
+            .custom-table td::before {
+                content: attr(data-cell);
+                font-weight: bold;
+                font-size: 16px;
+                text-transform: capitalize;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row mt-5">
+            <!-- Column A: Candidates -->
+            <div class="col-md-4">
+                <table id="candidate-table" class="table custom-table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Candidates</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidate in candidates %}
+                        <tr id="candidate-{{ candidate.id }}" class="candidate-item" data-id="{{ candidate.id }}">
+                            <td>{{ candidate.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- Column B: Skills -->
+            <div class="col-md-4">
+                <table id="skill-table" class="table custom-table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Skills</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for skill in skills %}
+                        <tr id="skill-{{ skill.id }}" class="skill-item" data-id="{{ skill.id }}">
+                            <td>{{ skill.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- Column C: Features -->
+            <div class="col-md-4">
+                <table id="feature-table" class="table custom-table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature in features %}
+                        <tr id="feature-{{ feature.id }}" class="feature-item" data-id="{{ feature.id }}">
+                            <td>{{ feature.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array to hold LeaderLine instances for clearing before drawing new lines
+        var lines = [];
+
+        // Helper function to remove all existing LeaderLine instances.
+        function clearLines() {
+            lines.forEach(function (line) {
+                line.remove();
+            });
+            lines = [];
+        }
+
+        $(document).ready(function () {
+            // Candidate click: Draw blue arrows (candidate → skill)
+            $('.candidate-item').click(function () {
+                clearLines();
+                var candidateId = $(this).data('id');
+                var candidateElem = document.getElementById("candidate-" + candidateId);
+                $('.candidate-item').removeClass('selected');
+                $(this).addClass('selected');
+
+                $.ajax({
+                    url: '/candidate/' + candidateId + '/skills/',
+                    method: 'GET',
+                    success: function (data) {
+                        data.skills.forEach(function (skill) {
+                            var skillElem = document.getElementById("skill-" + skill.id);
+                            if (skillElem) {
+                                var line = new LeaderLine(
+                                    candidateElem,
+                                    skillElem,
+                                    {
+                                        color: '#007bff',      // Blue arrow for candidate → skill
+                                        startPlug: 'behind',
+                                        endPlug: 'arrow',
+                                        dash: { animation: true }
+                                    }
+                                );
+                                lines.push(line);
+                            }
+                        });
+                    },
+                    error: function () {
+                        alert('An error occurred while fetching candidate skills.');
+                    }
+                });
+            });
+
+            // Feature click: Draw green arrows (feature → skill)
+            $('.feature-item').click(function () {
+                clearLines();
+                var featureId = $(this).data('id');
+                var featureElem = document.getElementById("feature-" + featureId);
+                $('.feature-item').removeClass('selected');
+                $(this).addClass('selected');
+
+                $.ajax({
+                    url: '/feature/' + featureId + '/skills/',
+                    method: 'GET',
+                    success: function (data) {
+                        data.skills.forEach(function (skill) {
+                            var skillElem = document.getElementById("skill-" + skill.id);
+                            if (skillElem) {
+                                var line = new LeaderLine(
+                                    featureElem,
+                                    skillElem,
+                                    {
+                                        color: '#28a745',      // Green arrow for feature → skill
+                                        startPlug: 'behind',
+                                        endPlug: 'arrow',
+                                        dash: { animation: true }
+                                    }
+                                );
+                                lines.push(line);
+                            }
+                        });
+                    },
+                    error: function () {
+                        alert('An error occurred while fetching feature skills.');
+                    }
+                });
+            });
+
+            // Skill click: Draw arrows from related candidates (yellow) and features (red) to/from the clicked skill.
+            $('.skill-item').click(function () {
+                clearLines();
+                var skillId = $(this).data('id');
+                var skillElem = document.getElementById("skill-" + skillId);
+                $('.skill-item').removeClass('selected');
+                $(this).addClass('selected');
+
+                $.ajax({
+                    url: '/skill/' + skillId + '/relations/',
+                    method: 'GET',
+                    success: function (data) {
+                        // Yellow arrow for candidate → skill in skill relation view
+                        data.candidate_data.forEach(function (candidate) {
+                            var candidateElem = document.getElementById("candidate-" + candidate.id);
+                            if (candidateElem) {
+                                var line = new LeaderLine(
+                                    skillElem,
+                                    candidateElem,
+                                    {
+                                        color: '#ffc107',
+                                        startPlug: 'behind',
+                                        endPlug: 'arrow',
+                                        dash: { animation: true }
+                                    }
+                                );
+                                lines.push(line);
+                            }
+                        });
+                        // Red arrow for skill → feature in skill relation view
+                        data.feature_data.forEach(function (feature) {
+                            var featureElem = document.getElementById("feature-" + feature.id);
+                            if (featureElem) {
+                                var line = new LeaderLine(
+                                    skillElem,
+                                    featureElem,
+                                    {
+                                        color: '#ffc107',
+                                        startPlug: 'behind',
+                                        endPlug: 'arrow',
+                                        dash: { animation: true }
+                                    }
+                                );
+                                lines.push(line);
+                            }
+                        });
+                    },
+                    error: function () {
+                        alert('An error occurred while fetching skill relations.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
